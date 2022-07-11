@@ -4,28 +4,28 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Paper from "@mui/material/Paper";
-import { FoodTableContext } from "../../Context/FoodTableContext";
+import { FoodContext } from "../../Context/Context";
 import { useContext } from "react";
 import Button from "@mui/material/Button";
 
 const TrackedFoodList = () => {
-  const context = useContext(FoodTableContext);
+  const context = useContext(FoodContext);
   const trackedFoodItems = context.foodListForTracking;
 
   const popTrackedFood = (food) => {
-    const foodId = food.id
-    context.setFoodListForTracking(context.foodListForTracking.filter(food => food.id !== foodId ));
+    const foodId = food.key
+    context.setFoodListForTracking(context.foodListForTracking.filter(food => food.key !== foodId ));
 
   };
 
   return (
-    <Paper>
+    <>
       {trackedFoodItems.map((foodItem) => {
-        console.log()
-        const controls = foodItem.id + "-content";
-        const id = foodItem.id + "-header";
+        const controls = foodItem.key + "-content";
+        const id = foodItem.key + "-header";
+
         return (
-          <Accordion key={foodItem.id}>
+          <Accordion key={foodItem.key}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls={controls}
@@ -40,15 +40,14 @@ const TrackedFoodList = () => {
               }}
             >
               <Typography>
-                Calories: {foodItem.calories} | Fat: {foodItem.fat} | Carbs:{" "}
-                {foodItem.carbs} | Protein: {foodItem.protein}
+                Calories: {foodItem.calories} kcals | Fat: {foodItem.fatFormat} | Carbs:
+                {foodItem.carbsFormat} | Protein: {foodItem.proteinFormat}
               </Typography>
               <Button
                 type="submit"
-                variant="contained"
                 color="secondary"
                 size="small"
-                sx={{color:"white"}}
+                sx={{color:"secondary"}}
                 onClick={()=>{popTrackedFood(foodItem)}}
               >
                 Remove
@@ -57,7 +56,7 @@ const TrackedFoodList = () => {
           </Accordion>
         );
       })}
-    </Paper>
+    </>
   );
 };
 

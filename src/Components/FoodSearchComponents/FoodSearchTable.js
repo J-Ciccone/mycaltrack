@@ -4,22 +4,20 @@ import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
 import { createFoodObjectsForTable } from "../../Services/FoodService";
 import { FOOD_TABLE_COLUMNS } from "../../Values";
-import { FoodTableContext } from "../../Context/FoodTableContext";
+import { FoodContext } from "../../Context/Context";
 import { useContext } from "react";
-import { Grid } from "@mui/material";
 
-const FoodListTable = () => {
-  const theme = useTheme();
-  const context = useContext(FoodTableContext);
+const FoodSearchTable = () => {
+  const context = useContext(FoodContext);
   let foodTableRows = createFoodObjectsForTable(context.foodListForTable);
   const columns = [
     {
-      field: "id",
+      field: "key",
       headerName: "Track",
       sortable: false,
       renderCell: (params) => {
         const onClick = (e) => {
-          e.stopPropagation(); // don't select this row after clicking
+          e.stopPropagation();
           context.setFoodListForTracking((prev) => [...prev, params.row]);
         };
 
@@ -37,14 +35,15 @@ const FoodListTable = () => {
     },
     ...FOOD_TABLE_COLUMNS,
   ];
-
+  //TODO figure oout hopw to get the datagrid to go back to page 0 when there is a new search
   return (
     <Paper
       sx={{
-        width: "55vw",
+        width:"100%",
+        
       }}
       elevation={3}
-    >
+    > 
       <DataGrid
         autoHeight
         columnThreshold={0}
@@ -57,4 +56,4 @@ const FoodListTable = () => {
   );
 };
 
-export default FoodListTable;
+export default FoodSearchTable;

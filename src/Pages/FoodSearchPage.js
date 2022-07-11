@@ -1,26 +1,19 @@
 import FoodSearchBar from "../Components/FoodSearchComponents/FoodSearchBar";
-import {Paper, Box, Grid, CssBaseline} from "@mui/material";
+import { Paper, Grid, CssBaseline } from "@mui/material";
 import { useState } from "react";
 import { getFood } from "../Services/FoodService";
 import FoodTracker from "../Components/TrackedFoodComponents/FoodTracker";
-import { FoodTableContext } from "../Context/FoodTableContext";
-import TrackedFoodList  from "../Components/TrackedFoodComponents/TrackedFoodList";
-import FoodListTable from "../Components/FoodSearchComponents/FoodListTable";
-import ExerciseTracker from "../Components/FoodSearchComponents/ExerciseTracker";
+import { FoodContext } from "../Context/Context";
+import TrackedFoodList from "../Components/TrackedFoodComponents/TrackedFoodList";
+import FoodListTable from "../Components/FoodSearchComponents/FoodSearchTable";
 
 const FoodSearchForm = () => {
   const [foodQuery, setFoodQuery] = useState("");
   const [foodListForTable, setFoodListForTable] = useState([]);
   const [foodListForTracking, setFoodListForTracking] = useState([]);
 
-  const onFoodSubmitted = (query) => {
-    getFood(query).then((result) => {
-      return setFoodQuery(result.foods);
-    });
-  };
-  //TODO Exercise amount take away calories
   return (
-    <FoodTableContext.Provider
+    <FoodContext.Provider
       value={{
         foodListForTracking,
         setFoodListForTracking,
@@ -33,46 +26,44 @@ const FoodSearchForm = () => {
       <Grid
         container
         component="main"
-        height= "100vh"
-        
         sx={{
+          
           justifyContent: "space-evenly",
-          pt:3
+          pt: 3,
         }}
       >
         <CssBaseline />
-        <Grid item>
-          <Paper sx={{mb:2}}>
-            <FoodSearchBar foodSubmittedHandler={onFoodSubmitted} />
-          </Paper>
+        <Grid item md={3} sm={11} mx={3}>
+          <FoodSearchBar/>
         </Grid>
-        <Grid item>
-          <Box
-            sx={{
-              width: "100%",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <FoodListTable/>
-          </Box>
+        <Grid
+          item
+          xs={11}
+          md={8}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <FoodListTable />
+
           <Paper
             sx={{
-              my: 8,
+              width:"100%",
+              mx: 3,
+              my: 4,
               display: "flex",
-              justifyContent: "space-evenly",
               flexDirection: "column",
             }}
           >
             <FoodTracker />
-            <Paper elevation={4}>
-              <TrackedFoodList />
-            </Paper>
+
+            <TrackedFoodList />
           </Paper>
         </Grid>
       </Grid>
-    </FoodTableContext.Provider>
+    </FoodContext.Provider>
   );
 };
 

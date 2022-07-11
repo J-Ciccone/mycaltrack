@@ -1,17 +1,19 @@
-import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import {  useContext } from "react";
-import Paper from "@mui/material/Paper";
-import { FoodTableContext } from "../../Context/FoodTableContext";
+import { Typography, Paper, Button, Box, Snackbar } from "@mui/material";
+import { useContext, useState } from "react";
+import { FoodContext } from "../../Context/Context";
+import { getAuth } from "firebase/auth";
+import { ref, set, push } from "firebase/database";
+import {  MyRTDS } from "../../FireBaseValues";
 
 const FoodTracker = () => {
-  const context = useContext(FoodTableContext);
+  const context = useContext(FoodContext);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   let calories = 0;
   let carbs = 0;
   let fat = 0;
   let protein = 0;
 
+  //Total values for nutrients of the tracked food list 
   for (let food of context.foodListForTracking) {
     calories += food.calories;
     carbs += food.carbs;
@@ -19,7 +21,34 @@ const FoodTracker = () => {
     protein += food.protein;
   }
 
-  const caloriesSubmitHandler = () => {};
+  //creates a log item for the user's current list of food and posts to the RTDS
+  const saveFoodHandler = () => {
+    if (context.foodListForTracking.length > 0) {
+      const user = getAuth().currentUser;
+      const date = new Date();
+      for (let food of context.foodListForTracking) {
+        if (food.brand === undefined) {
+          food.brand = null;
+        }
+      }
+
+      //create a new log item
+      const newUserLogItemObject = {
+        id: calories + Math.floor(Math.random() * 10000),
+        day: date.getMonth() + "/" + date.getDate() + "/" + date.getFullYear() + " @" + date.getHours()+":"+date.getMinutes(),
+        userCalories: calories,
+        userFoods: context.foodListForTracking,
+      };
+
+      //get a reference to the user in the RTDS and update
+      const dbRef = ref(MyRTDS, "users/" + user.uid);
+      const update = push(dbRef);
+      set(update, newUserLogItemObject).then(() => {
+        context.setFoodListForTracking([]);
+        setSnackbarOpen(true);
+      });
+    }
+  };
 
   return (
     <Box
@@ -71,11 +100,17 @@ const FoodTracker = () => {
           variant="contained"
           sx={{ mt: 3, mb: 2, color: "white" }}
           color="primary"
-          onClick={caloriesSubmitHandler}
+          onClick={saveFoodHandler}
         >
           Save
         </Button>
       </Paper>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={() => setSnackbarOpen(false)}
+        message="Meals Logged"
+      />
     </Box>
   );
 };

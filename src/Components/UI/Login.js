@@ -19,7 +19,6 @@ const Login = () => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        console.log(user);
         // ...
       })
       .catch((error) => {
@@ -71,11 +70,18 @@ const Login = () => {
             variant="contained"
             sx={{ my: 3, mr: 5 }}
           >
-            Login In
+            Log In
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link>Forgot password?</Link>
+            <Typography>
+                <NavLink
+                  style={{ textDecoration: "none", color: "#609BC5" }}
+                  to="/forgot"
+                >
+                  Forgot Password.
+                </NavLink>
+              </Typography>
             </Grid>
             <Grid item>
               <Typography>

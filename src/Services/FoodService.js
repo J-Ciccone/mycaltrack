@@ -1,5 +1,6 @@
 import { API_KEY } from "../Values";
 
+//API call for retrieving food search results
 export const getFood = (foodName) => {
   return fetch(
     "https://api.nal.usda.gov/fdc/v1/foods/search?query=" +
@@ -11,6 +12,7 @@ export const getFood = (foodName) => {
   });
 };
 
+//helper function to get nutrient info from search results
 const getFoodNutrients = (foodNutrientArray) => {
   const nutrientCodes = [1003, 1004, 1005, 1008];
   let foundNutrientObject = {
@@ -32,6 +34,7 @@ const getFoodNutrients = (foodNutrientArray) => {
   return foundNutrientObject;
 };
 
+//creates food objects for tracking 
 export const createFoodObjectsForTable = (foods) => {
   const foodArrayCurrent = [...foods];
   const foodArrayFormatted = [];
@@ -39,7 +42,7 @@ export const createFoodObjectsForTable = (foods) => {
     let nutrients = getFoodNutrients(food.foodNutrients);
     let newFoodObject = {
       id: food.fdcId,
-      buttonKey: food.fdcId,
+      key: food.fdcId+((Math.floor(Math.random() * 10000))),
       description: food.description,
       brand: food.brandOwner,
       category: food.foodCategory,

@@ -12,6 +12,7 @@ const SignupPage = () => {
       sx={{
         justifyContent: "center",
         pt: 3,
+        px:1
       }}
     >
       <CssBaseline />

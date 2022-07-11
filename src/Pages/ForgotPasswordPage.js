@@ -1,8 +1,8 @@
-import { Grid, CssBaseline } from "@mui/material";
+import {  Grid, CssBaseline } from "@mui/material";
 import { getAuth } from "firebase/auth";
-import Login from "../Components/UI/Login";
+import ForgotPassword from "../Components/UI/ForgotPassword";
 
-const LoginPage = () => {
+const ForgotPasswordPage = () => {
   const auth = getAuth();
 
   return (
@@ -12,13 +12,12 @@ const LoginPage = () => {
       sx={{
         justifyContent: "center",
         pt: 3,
-        px:1
       }}
     >
       <CssBaseline />
-      <Login />
+      <ForgotPassword />
     </Grid>
   );
 };
 
-export default LoginPage;
+export default ForgotPasswordPage;
