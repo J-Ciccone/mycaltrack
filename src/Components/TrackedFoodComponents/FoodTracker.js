@@ -35,7 +35,7 @@ const FoodTracker = () => {
       //create a new log item
       const newUserLogItemObject = {
         id: calories + Math.floor(Math.random() * 10000),
-        day: date.getMonth() + "/" + date.getDate() + "/" + date.getFullYear() + " @" + date.getHours()+":"+date.getMinutes(),
+        day: date.getMonth()+1 + "/" + date.getDate() + "/" + date.getFullYear() + " @" + date.getHours()+":"+date.getMinutes(),
         userCalories: calories,
         userFoods: context.foodListForTracking,
       };
